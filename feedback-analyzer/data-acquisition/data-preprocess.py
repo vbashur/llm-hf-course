@@ -41,7 +41,7 @@ df_labeled['sentiment'] = df_labeled['label'].apply(lambda x: 'POSITIVE' if x ==
 # 4. Проверяем распределение
 sentiment_counts = df_labeled['sentiment'].value_counts()
 
-print("\nРаспределение тональности по звездному рейтингу:")
+print("\nРаспределение тональности по stars рейтингу:")
 print(sentiment_counts)
 print(f"\nИтоговый размер набора данных для анализа: {len(df_labeled)}")
 
