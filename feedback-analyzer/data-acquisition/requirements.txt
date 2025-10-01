@@ -6,3 +6,10 @@ python-dateutil==2.9.0.post0
 pytz==2025.2
 six==1.17.0
 tzdata==2025.2
+
+transformers>=4.40.0
+datasets>=2.19.0
+evaluate>=0.4.2
+torch>=2.3.0
+scikit-learn==1.7.2
+accelerate>=0.26.0
