@@ -11,10 +11,11 @@ OUTPUT_DIR = "./results/sentiment_finetuning"
 EPOCHS = 3
 
 # --- 2. Load and Prepare Data ---
-df = pd.read_csv('bestsecret_preprocessed.csv')
+df = pd.read_csv('bestsecret_balanced.csv')
 
 # The Trainer expects columns named 'text' and 'label' (as int)
 df = df.rename(columns={'cleaned_content': 'text', 'score': 'label'})
+print(f"Number of sentiment counts: {df['sentiment'].value_counts()}")
 
 # Convert pandas DataFrame to Hugging Face Dataset
 hf_dataset = Dataset.from_pandas(df[['text', 'label']])
@@ -87,6 +88,10 @@ trainer = Trainer(
 # --- 6. Train the Model ---
 print("\n🚀 Начинаем Fine-tuning модели...")
 trainer.train()
+
+trainer.save_model(training_args.output_dir)
+tokenizer.save_pretrained(training_args.output_dir)
+print(f"Лучшая модель сохранена в: {training_args.output_dir}")
 
 # --- 7. Evaluation ---
 print("\n✅ Финальная оценка модели на тестовом наборе:")
