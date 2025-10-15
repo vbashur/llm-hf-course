@@ -5,15 +5,15 @@ import pandas as pd
 import json
 
 # Load label mappings
-with open("label_map.json") as f:
+with open("color_map.json") as f:
     id2label = json.load(f)
 label2id = {v: k for k, v in id2label.items()}
 
 # Load dataset
 df = pd.read_csv("fashion_captions_combined.csv")
 df["text"] = df["final_description"].fillna("") + " " + df["generated_caption"].fillna("")
-df = df.dropna(subset=["articleType"])
-df["label"] = df["articleType"].astype("category").cat.codes
+df = df.dropna(subset=["baseColour"])
+df["label"] = df["baseColour"].astype("category").cat.codes
 
 # Train/test split
 train_df = df.sample(frac=0.8, random_state=42)
@@ -44,14 +44,14 @@ model = AutoModelForSequenceClassification.from_pretrained(
 )
 
 training_args = TrainingArguments(
-    output_dir="./results",
+    output_dir="./results_color_classifier",
     # evaluation_strategy="no",
     save_strategy="epoch",
     per_device_train_batch_size=16,
     per_device_eval_batch_size=16,
     num_train_epochs=3,
     weight_decay=0.01,
-    logging_dir="./logs",
+    logging_dir="./logs_color_classifier",
     logging_steps=50,
 )
 
@@ -64,5 +64,5 @@ trainer = Trainer(
 )
 
 trainer.train()
-trainer.save_model("./fashion_classifier")
-tokenizer.save_pretrained("./fashion_classifier")
+trainer.save_model("./fashion_color_classifier")
+tokenizer.save_pretrained("./fashion_color_classifier")
