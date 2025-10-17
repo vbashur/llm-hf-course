@@ -45,7 +45,7 @@ model = AutoModelForSequenceClassification.from_pretrained(
 
 training_args = TrainingArguments(
     output_dir="./results_color_classifier",
-    # evaluation_strategy="no",
+    eval_strategy="epoch",
     save_strategy="epoch",
     per_device_train_batch_size=16,
     per_device_eval_batch_size=16,

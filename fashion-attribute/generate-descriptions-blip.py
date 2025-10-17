@@ -16,11 +16,15 @@ df = df.reset_index(drop=True)
 image_dir = "kaggle-small/images/"
 
 results = []
-head_count=4000
+head_count=10000
 print(f"handle {head_count} rows")
-for i, row in df.head(head_count).iterrows():  # test on 100 first
+for i, row in df.head(head_count).iterrows():
     img_path = os.path.join(image_dir, str(row['id']) + ".jpg")
-    image = Image.open(img_path).convert("RGB")
+    try:
+        image = Image.open(img_path).convert("RGB")
+    except FileNotFoundError:
+        print(f"Image not found: {img_path}, skipping.")
+        continue
 
     inputs = processor(image, return_tensors="pt").to(device)
     out = model.generate(**inputs, max_length=30)
