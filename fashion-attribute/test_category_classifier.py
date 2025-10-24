@@ -9,7 +9,7 @@ with open("label_map.json") as f:
     label2id = json.load(f)
 id2label = {v: k for k, v in label2id.items()}
 
-text = "a blue slim fit pants for men"
+text = "blue backpack for outdoor activities"
 inputs = tokenizer(text, return_tensors="pt")
 outputs = model(**inputs)
 pred = torch.argmax(outputs.logits, dim=1).item()

@@ -14,6 +14,6 @@ combined_embeddings = np.concatenate((emb_article, emb_color), axis=1)
 # combined_embeddings = (emb_article + emb_color) / 2
 
 # Save combined embeddings
-np.save("embeddings_combined.npy", combined_embeddings)
+np.save("embeddings_image_combined.npy", combined_embeddings)
 
 print(f"Combined embeddings shape: {combined_embeddings.shape}")

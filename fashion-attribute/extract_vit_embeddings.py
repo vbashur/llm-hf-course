@@ -25,13 +25,16 @@ for i, row in tqdm(df.iterrows(), total=len(df)):
         inputs = processor(images=image, return_tensors="pt")
         with torch.no_grad():
             outputs = model(**inputs)
-        emb = outputs.last_hidden_state[:, 0, :].squeeze().numpy()
+        emb = outputs.last_hidden_state[:, 0, :].cpu().numpy()
         embeddings.append(emb)
         ids.append(row["id"])
     except:
         continue
 TARGET_EMBEDDINGS_FILENAME = f"embeddings_{TARGET}.npy"
-np.save(TARGET_EMBEDDINGS_FILENAME, np.stack(embeddings))
+embeddings_stack = np.stack(embeddings)
+np.save(TARGET_EMBEDDINGS_FILENAME, embeddings_stack)
 
 TARGET_DATAFRAME_FILENAME = f"vit_ids_{TARGET}.csv"
 pd.DataFrame({"id": ids}).to_csv(TARGET_DATAFRAME_FILENAME, index=False)
+
+print(f"Embeddings dimensions {embeddings_stack.shape}")
