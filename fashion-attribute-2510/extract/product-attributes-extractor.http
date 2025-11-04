@@ -1,0 +1,45 @@
+GET https://<ES_HOST>/<ES_INDEX>/_search
+Content-Type: application/json
+Authorization:Basic <user> <password>
+Accept: */*
+
+{
+  "_source": [
+    "baseProductCode",
+    "colorCode",
+    "name",
+    "labelName",
+    "labelCode",
+    "displayColorName",
+    "filterData.colorName",
+    "searchableCategoryNames",
+    "filterData.patterns[0].name",
+    "productImages[0].lowRes"
+  ],
+  "size": <PUT_DESIRED_AMOUNT_OF_PRODUCTS_TO_FETCH>,
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "term": {
+            "categoryCodes": {
+              "value": <PUT_YOUR_TARGET_CATEGORY>
+            }
+          }
+        }
+      ]
+    }
+  },
+  "script_fields": {
+    "firstLowRes": {
+      "script": {
+        "source": "params._source.productImages != null && params._source.productImages.size() > 0 ? params._source.productImages[0].lowRes : null"
+      }
+    },
+    "patterns": {
+      "script": {
+        "source": "params._source.filterData.patterns != null && params._source.filterData.patterns.size() > 0 ? params._source.filterData.patterns[0].name : null"
+      }
+    }
+  }
+}
